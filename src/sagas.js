@@ -6,7 +6,7 @@ import {
   all,
   select
 } from 'redux-saga/effects';
-import { AsyncStorage } from 'react-native';
+import { AsyncStorage } from '@react-native-community/async-storage';
 import {
   TARGET_FETCH_REQUESTED,
   TARGET_FETCH_SUCCEEDED,

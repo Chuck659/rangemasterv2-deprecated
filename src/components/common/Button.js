@@ -18,12 +18,13 @@ const styles = {
   buttonStyle: {
     flex: 1,
     alignSelf: 'stretch',
-    backgroundColor: '#2196F3',
+    backgroundColor: '#238e49',
     borderRadius: 10,
     borderWidth: 1,
     borderColor: '#007aff',
     marginLeft: 5,
-    marginRight: 5
+    marginRight: 5,
+    elevation: 2 // Android
   },
   textStyle: {
     alignSelf: 'center',

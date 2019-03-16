@@ -1,4 +1,4 @@
-import { AsyncStorage } from 'react-native';
+import { AsyncStorage } from '@react-native-community/async-storage';
 import {
   TARGET_FETCH_REQUESTED,
   TARGET_STATUS_UPDATE_START,
