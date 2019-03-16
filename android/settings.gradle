@@ -1,0 +1,3 @@
+rootProject.name = 'rangemasterv2'
+
+include ':app'
