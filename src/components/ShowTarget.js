@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Text, View, ScrollView, CheckBox } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import { Card, CardSection, LabelledText, Button, Input } from './common';
-// import Debug from '../Debug';
+import Debug from '../Debug';
 import {
   deleteTarget,
   runTarget,
@@ -12,10 +12,30 @@ import {
   executeFunction,
   toggleDisabled,
   toggleDebug,
-  updateCommand
+  updateCommand,
+  updateData,
+  updateDataStart
 } from '../actions';
 
 class ShowTarget extends Component {
+  constructor(props) {
+    super(props);
+    this.timer = null;
+    this.state = { timer: null };
+  }
+
+  startDataTimer() {
+    if (!this.state.timer) {
+      timer = setTimeout(() => {
+        Debug.log('ShowTarget::Timeoout get data');
+        this.props.updateDataStart(this.props.target.name);
+        this.props.updateData(this.props.target.name);
+        this.setState({ timer: null });
+      }, 10000);
+      this.setState({ timer });
+    }
+  }
+
   onDelete() {
     this.props.deleteTarget(this.props.target.name);
     Actions.pop();
@@ -23,6 +43,7 @@ class ShowTarget extends Component {
 
   onRun() {
     this.props.runTarget(this.props.target.name);
+    this.startDataTimer();
   }
 
   onReset() {
@@ -33,8 +54,15 @@ class ShowTarget extends Component {
     this.props.clearTargetData(this.props.target.name);
   }
 
+  onRefreshData() {
+    this.props.updateDataStart(this.props.target.name);
+    this.props.updateData(this.props.target.name);
+  }
+
   onFunction(func, data) {
+    Debug.log(`Execute function: ${func}`);
     this.props.executeFunction(this.props.target.name, func, data);
+    this.startDataTimer();
   }
 
   onToggleDisabled() {
@@ -74,6 +102,7 @@ class ShowTarget extends Component {
 
   render() {
     const { target } = this.props;
+    const { timer } = this.state;
     if (!target) return <View />;
     return (
       <ScrollView>
@@ -91,32 +120,52 @@ class ShowTarget extends Component {
           </CardSection>
 
           <CardSection>
-            <Button onPress={() => this.onRun()}>Run</Button>
+            <Button onPress={() => this.onRun()} disabled={!!timer}>
+              Run
+            </Button>
           </CardSection>
 
           <CardSection>
-            <Button onPress={() => this.onFunction('function1')}>
+            <Button
+              onPress={() => this.onFunction('function1')}
+              disabled={!!timer}
+            >
               Function 1
             </Button>
-            <Button onPress={() => this.onFunction('function2')}>
+            <Button
+              onPress={() => this.onFunction('function2')}
+              disabled={!!timer}
+            >
               Function 2
             </Button>
           </CardSection>
 
           <CardSection>
-            <Button onPress={() => this.onFunction('function3')}>
+            <Button
+              onPress={() => this.onFunction('function3')}
+              disabled={!!timer}
+            >
               Function 3
             </Button>
-            <Button onPress={() => this.onFunction('function4')}>
+            <Button
+              onPress={() => this.onFunction('function4')}
+              disabled={!!timer}
+            >
               Function 4
             </Button>
           </CardSection>
 
           <CardSection>
-            <Button onPress={() => this.onFunction('function5')}>
+            <Button
+              onPress={() => this.onFunction('function5')}
+              disabled={!!timer}
+            >
               Function 5
             </Button>
-            <Button onPress={() => this.onFunction('function6')}>
+            <Button
+              onPress={() => this.onFunction('function6')}
+              disabled={!!timer}
+            >
               Function 6
             </Button>
           </CardSection>
@@ -184,7 +233,9 @@ const actionsToMap = {
   executeFunction,
   toggleDisabled,
   toggleDebug,
-  updateCommand
+  updateCommand,
+  updateData,
+  updateDataStart
 };
 export default connect(
   mapStateToProps,
